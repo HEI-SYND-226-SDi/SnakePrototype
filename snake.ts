@@ -28,9 +28,42 @@ class SnakeGame {
         new Point(29, 13)
     ];
 
-    public update() {}
+    constructor() {
+        setInterval(() => {
+            this.update();
+            this.render();
+        }, 100);
+    }
 
-    public render() {
+    private update() {
+        const newHead = new Point(this.snake[0].x, this.snake[0].y);
+        switch (this.direction) {
+            case Direction.UP:
+                newHead.y--;
+                if (newHead.y < 0) newHead.y = 31;
+                break;
+
+            case Direction.DOWN:
+                newHead.y++;
+                if (newHead.y > 31) newHead.y = 0;
+                break;
+
+            case Direction.LEFT:
+                newHead.x--;
+                if (newHead.x < 0) newHead.x = 0;
+                break;
+
+            case Direction.RIGHT:
+                newHead.x++;
+                if (newHead.x > 63) newHead.x = 0;
+                break;
+        }
+
+        this.snake.unshift(newHead);
+        this.snake.pop();
+    }
+
+    private render() {
         const context = this.display.getContext('2d');
         context.clearRect(0, 0, 640, 320);
 
@@ -47,5 +80,4 @@ class SnakeGame {
 
 $(() => {
     const game = new SnakeGame();
-    game.render();
 });
