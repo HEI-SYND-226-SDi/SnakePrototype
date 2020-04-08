@@ -28,11 +28,24 @@ class SnakeGame {
         new Point(29, 13)
     ];
 
-    private update() {}
+    public update() {}
 
-    private render() {}
+    public render() {
+        const context = this.display.getContext('2d');
+        context.clearRect(0, 0, 640, 320);
+
+        context.save();
+        context.scale(10, 10);
+        context.fillStyle = 'black';
+        for (const point of this.snake) {
+            context.fillRect(point.x, point.y, 1, 1);
+        }
+
+        context.restore();
+    }
 }
 
 $(() => {
     const game = new SnakeGame();
+    game.render();
 });
