@@ -197,3 +197,6 @@ fabric.properties
 .idea/**/markdown-navigator/
 
 # End of https://www.gitignore.io/api/node,webstorm
+
+/snake.js.map
+/snake.js
