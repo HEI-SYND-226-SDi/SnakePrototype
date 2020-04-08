@@ -27,13 +27,35 @@ class SnakeGame {
         new Point(30, 13),
         new Point(29, 13)
     ];
+    private client = new Paho.MQTT.Client("mqtt-ws.sdi.hevs.ch", 80, "/ws", "snake-prototype");
+    private intervalID = 0;
 
     constructor() {
+        this.client.onConnectionLost = this.onDisconnected.bind(this);
+        this.client.onMessageArrived = this.onMessageArrived.bind(this);
+
+        this.client.connect({
+            userName: 'sdiXX',
+            password: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            keepAliveInterval: 30,
+            cleanSession: true,
+            onSuccess: this.onConnected.bind(this)
+        });
+    }
+
+    private onConnected() {
         setInterval(() => {
             this.update();
             this.render();
         }, 100);
     }
+
+    private onDisconnected() {
+        clearInterval(this.intervalID);
+        this.intervalID = 0;
+    }
+
+    private onMessageArrived(message: Paho.MQTT.Message) {}
 
     private update() {
         const newHead = new Point(this.snake[0].x, this.snake[0].y);
