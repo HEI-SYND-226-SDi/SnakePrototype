@@ -31,6 +31,13 @@ class SnakeGame {
     private intervalID = 0;
 
     constructor() {
+        const lastWillMessage = new Paho.MQTT.Message(JSON.stringify({
+            red: 0,
+            green: 0,
+            blue: 0
+        }));
+        lastWillMessage.destinationName = "sdi42/VirtualGamePad/LED";
+
         this.client.onConnectionLost = this.onDisconnected.bind(this);
         this.client.onMessageArrived = this.onMessageArrived.bind(this);
 
@@ -39,11 +46,18 @@ class SnakeGame {
             password: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             keepAliveInterval: 30,
             cleanSession: true,
-            onSuccess: this.onConnected.bind(this)
+            onSuccess: this.onConnected.bind(this),
+            willMessage: lastWillMessage
         });
     }
 
     private onConnected() {
+        this.client.send("sdi42/VirtualGamePad/LED", JSON.stringify({
+            red: 50,
+            green: 255,
+            blue: 100
+        }));
+
         setInterval(() => {
             this.update();
             this.render();
