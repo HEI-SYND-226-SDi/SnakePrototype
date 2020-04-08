@@ -1,0 +1,11 @@
+{
+  "name": "snake-prototype",
+  "version": "1.0.0",
+  "description": "Strict minimal example using the virtual game pad input device",
+  "license": "MIT",
+  "repository": "https://github.com/HEI-SYND-226-SDi/SnakePrototype",
+  "dependencies": {
+    "@types/jquery": "3.3.1",
+    "@types/paho-mqtt": "1.0.1"
+  }
+}
