@@ -52,6 +52,11 @@ class SnakeGame {
     }
 
     private onConnected() {
+        this.client.subscribe("sdi42/VirtualGamePad/UpButton");
+        this.client.subscribe("sdi42/VirtualGamePad/DownButton");
+        this.client.subscribe("sdi42/VirtualGamePad/LeftButton");
+        this.client.subscribe("sdi42/VirtualGamePad/RightButton");
+
         this.client.send("sdi42/VirtualGamePad/LED", JSON.stringify({
             red: 50,
             green: 255,
@@ -70,7 +75,24 @@ class SnakeGame {
         this.intervalID = 0;
     }
 
-    private onMessageArrived(message: Paho.MQTT.Message) {}
+    private onMessageArrived(message: Paho.MQTT.Message) {
+        if (message.destinationName == 'sdi42/VirtualGamePad/UpButton' &&
+            message.payloadString == "1" && this.direction != Direction.DOWN) {
+            this.direction = Direction.UP;
+        }
+        if (message.destinationName == 'sdi42/VirtualGamePad/DownButton' &&
+            message.payloadString == "1" && this.direction != Direction.UP) {
+            this.direction = Direction.DOWN;
+        }
+        if (message.destinationName == 'sdi42/VirtualGamePad/LeftButton' &&
+            message.payloadString == "1" && this.direction != Direction.RIGHT) {
+            this.direction = Direction.LEFT;
+        }
+        if (message.destinationName == 'sdi42/VirtualGamePad/RightButton' &&
+            message.payloadString == "1" && this.direction != Direction.LEFT) {
+            this.direction = Direction.RIGHT;
+        }
+    }
 
     private update() {
         const newHead = new Point(this.snake[0].x, this.snake[0].y);
@@ -87,7 +109,7 @@ class SnakeGame {
 
             case Direction.LEFT:
                 newHead.x--;
-                if (newHead.x < 0) newHead.x = 0;
+                if (newHead.x < 0) newHead.x = 63;
                 break;
 
             case Direction.RIGHT:
