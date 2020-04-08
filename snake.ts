@@ -7,3 +7,10 @@ class Point {
     public x: number = 0;
     public y: number = 0;
 }
+
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+}
