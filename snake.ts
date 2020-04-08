@@ -61,6 +61,7 @@ class SnakeGame {
         setInterval(() => {
             this.update();
             this.render();
+            this.updateGamePadLCD();
         }, 100);
     }
 
@@ -111,6 +112,11 @@ class SnakeGame {
         }
 
         context.restore();
+    }
+
+    private updateGamePadLCD() {
+        const data = this.display.toDataURL("image/png").replace(/^data:image\/png;base64,/, "");
+        this.client.send("sdi42/VirtualGamePad/LCD/PNG", data);
     }
 }
 
